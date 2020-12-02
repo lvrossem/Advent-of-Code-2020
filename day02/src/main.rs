@@ -25,12 +25,12 @@ fn parse_part1(line:String) -> bool {
     let split_line = line.split(' ').collect::<Vec<&str>>();
     let amount = split_line[0].split('-').collect::<Vec<&str>>();
 
-    let min:usize = amount[0].parse::<u32>().unwrap() as usize;
-    let max:usize = amount[1].parse::<u32>().unwrap() as usize;
+    let min:u16 = amount[0].parse::<u16>().unwrap();
+    let max:u16 = amount[1].parse::<u16>().unwrap();
 
     let character:char = split_line[1].as_bytes()[0] as char;
 
-    let occurences:usize = split_line[2].matches(character).count();
+    let occurences:u16 = split_line[2].matches(character).count() as u16;
 
     return occurences >= min && occurences <= max;
 }
@@ -39,8 +39,8 @@ fn parse_part2(line:String) -> bool {
     let split_line = line.split(' ').collect::<Vec<&str>>();
     let amount = split_line[0].split('-').collect::<Vec<&str>>();
 
-    let min:usize = amount[0].parse::<u32>().unwrap() as usize;
-    let max:usize = amount[1].parse::<u32>().unwrap() as usize;
+    let min:usize = amount[0].parse::<usize>().unwrap() as usize;
+    let max:usize = amount[1].parse::<usize>().unwrap() as usize;
 
     let character:u8 = split_line[1].as_bytes()[0];
     let mut matches:u16 = 0;
