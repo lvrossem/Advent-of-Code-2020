@@ -1,10 +1,8 @@
-use std::io::{self};
-
-fn main() -> io::Result<()> {
-    let mut amount:usize = std::fs::read_to_string("day02_input.txt")
+fn main() {
+    let mut amount = std::fs::read_to_string("day02_input.txt")
         .expect("file not found!")
         .lines()
-        .map(|x| parse_part1(x.to_string()))
+        .map(check_part1)
         .filter(|x| *x)
         .count();
 
@@ -13,36 +11,34 @@ fn main() -> io::Result<()> {
     amount = std::fs::read_to_string("day02_input.txt")
         .expect("file not found!")
         .lines()
-        .map(|x| parse_part2(x.to_string()))
+        .map(check_part2)
         .filter(|x| *x)
         .count();
 
     println!("There are {} valid passwords for part 2", amount);
-    Ok(())
 }
 
-fn parse_part1(line:String) -> bool {
+fn parse(line: &str) -> (usize, usize, u8, &str) {
     let split_line = line.split(' ').collect::<Vec<&str>>();
     let amount = split_line[0].split('-').collect::<Vec<&str>>();
 
-    let min:u16 = amount[0].parse::<u16>().unwrap();
-    let max:u16 = amount[1].parse::<u16>().unwrap();
+    let min = amount[0].parse::<usize>().unwrap();
+    let max = amount[1].parse::<usize>().unwrap();
 
-    let character:char = split_line[1].as_bytes()[0] as char;
+    let character = split_line[1].as_bytes()[0];
+    
+    return (min, max, character, split_line[2]);
+}
 
-    let occurences:u16 = split_line[2].matches(character).count() as u16;
+fn check_part1(line: &str) -> bool {
+    let (min, max, character, password) = parse(line);
+    let occurences = password.matches(character as char).count();
 
     return occurences >= min && occurences <= max;
 }
 
-fn parse_part2(line:String) -> bool {
-    let split_line = line.split(' ').collect::<Vec<&str>>();
-    let amount = split_line[0].split('-').collect::<Vec<&str>>();
-
-    let min:usize = amount[0].parse::<usize>().unwrap() as usize;
-    let max:usize = amount[1].parse::<usize>().unwrap() as usize;
-
-    let character:u8 = split_line[1].as_bytes()[0];
+fn check_part2(line: &str) -> bool {
+    let (min, max, character, password) = parse(line);
     
-    return (split_line[2].as_bytes()[min - 1] == character) ^ (split_line[2].as_bytes()[max - 1] == character);
+    return (password.as_bytes()[min - 1] == character) != (password.as_bytes()[max - 1] == character);
 }
