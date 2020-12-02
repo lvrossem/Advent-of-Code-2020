@@ -43,15 +43,6 @@ fn parse_part2(line:String) -> bool {
     let max:usize = amount[1].parse::<usize>().unwrap() as usize;
 
     let character:u8 = split_line[1].as_bytes()[0];
-    let mut matches:u16 = 0;
-
-    if split_line[2].as_bytes()[min - 1] == character {
-        matches += 1;
-    }
-
-    if split_line[2].as_bytes()[max - 1] == character {
-        matches += 1;
-    }
-
-    return matches == 1;
+    
+    return (split_line[2].as_bytes()[min - 1] == character) ^ (split_line[2].as_bytes()[max - 1] == character);
 }
