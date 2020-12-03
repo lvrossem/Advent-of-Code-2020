@@ -1,8 +1,9 @@
 fn check_tree(line: &str, x_slope: usize, y_slope: usize, line_nr: &mut usize) -> bool {
     if *line_nr > 0 {
         if (*line_nr) % y_slope == 0 {
-            
-            let result = line.as_bytes()[(x_slope * (*line_nr / y_slope)) % line.as_bytes().len()] as char == '#';
+            let bytes = line.as_bytes();
+
+            let result = bytes[(x_slope * (*line_nr / y_slope)) % bytes.len()] as char == '#';
             *line_nr += 1;
 
             return result;
