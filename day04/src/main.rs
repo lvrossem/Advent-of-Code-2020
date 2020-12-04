@@ -5,7 +5,7 @@ fn main() {
         .expect("Something went wrong reading the file");
 
     let split_lines = contents.split("\n\n").collect::<Vec<&str>>();
-    
+
     let mut amount1 = 0;
     let mut amount2 = 0;
 
@@ -33,15 +33,15 @@ fn check1(passport: &str) -> bool {
 fn check2(passport: &str) -> bool {
     for part in passport.split(|x| (x == ' ') || (x == '\n')) {
 
-        if part.contains("byr") && !check_byr(part.to_string()) {
+        if part.contains("byr") && !check_year_entry(part.to_string(), 1920, 2002) {
             return false;
         }
 
-        if part.contains("iyr") && !check_iyr(part.to_string()) {
+        if part.contains("iyr") && !check_year_entry(part.to_string(), 2010, 2020) {
             return false;
         }
 
-        if part.contains("eyr") && !check_eyr(part.to_string()) {
+        if part.contains("eyr") && !check_year_entry(part.to_string(), 2020, 2030) {
             return false;
         }
 
@@ -69,29 +69,10 @@ fn parse_usize(text: &str, start: usize, stop: usize) -> usize {
     return text[start..stop].parse::<usize>().unwrap();
 }
 
-fn check_byr(part: String) -> bool {
+fn check_year_entry(part: String, min: usize, max: usize) -> bool {
     if part.len() == 8 {
         let year_parsed = parse_usize(&part, 4, 8);
-
-        return year_parsed >= 1920 && year_parsed <= 2002
-    } else {
-        return false;
-    }
-}
-
-fn check_iyr(part: String) -> bool {
-    if part.len() == 8 {
-        let year_parsed = parse_usize(&part, 4, 8);
-        return year_parsed >= 2010 && year_parsed <= 2020
-    } else {
-        return false;
-    }
-}
-
-fn check_eyr(part: String) -> bool {
-    if part.len() == 8 {
-        let year_parsed = parse_usize(&part, 4, 8);
-        return year_parsed >= 2020 && year_parsed <= 2030;
+        return year_parsed >= min && year_parsed <= max
     } else {
         return false;
     }
@@ -135,12 +116,9 @@ fn check_hcl(part: String) -> bool {
 fn check_ecl(part: String) -> bool {
     if part.len() == 7 {
         let color_part = &part[4..7];
-        return color_part == "amb"
-            || color_part == "blu"
-            || color_part == "brn"
-            || color_part == "gry"
-            || color_part == "grn"
-            || color_part == "hzl"
+        return color_part == "amb" || color_part == "blu"
+            || color_part == "brn" || color_part == "gry"
+            || color_part == "grn" || color_part == "hzl"
             || color_part == "oth"
     } else {
         return false
