@@ -5,6 +5,7 @@ fn main() {
         .expect("Something went wrong reading the file");
 
     let split_lines = contents.split("\n\n").collect::<Vec<&str>>();
+    
     let mut amount1 = 0;
     let mut amount2 = 0;
 
@@ -30,7 +31,7 @@ fn check1(passport: &str) -> bool {
 }
 
 fn check2(passport: &str) -> bool {
-    for part in passport.split(|x| (x == ' ') || (x == '\n') ) {
+    for part in passport.split(|x| (x == ' ') || (x == '\n')) {
 
         if part.contains("byr") && !check_byr(part.to_string()) {
             return false;
@@ -64,25 +65,23 @@ fn check2(passport: &str) -> bool {
     return check1(passport);
 }
 
-fn parse_year(text: String, start: usize, stop: usize) -> usize {
-    let year_part = &text[start..stop];
-    return year_part.parse::<usize>().unwrap();
+fn parse_usize(text: &str, start: usize, stop: usize) -> usize {
+    return text[start..stop].parse::<usize>().unwrap();
 }
 
 fn check_byr(part: String) -> bool {
     if part.len() == 8 {
-        let year_parsed = parse_year(part, 4, 8);
+        let year_parsed = parse_usize(&part, 4, 8);
 
         return year_parsed >= 1920 && year_parsed <= 2002
     } else {
         return false;
     }
-    println!("byr: {}", part);
 }
 
 fn check_iyr(part: String) -> bool {
     if part.len() == 8 {
-        let year_parsed = parse_year(part, 4, 8);
+        let year_parsed = parse_usize(&part, 4, 8);
         return year_parsed >= 2010 && year_parsed <= 2020
     } else {
         return false;
@@ -91,7 +90,7 @@ fn check_iyr(part: String) -> bool {
 
 fn check_eyr(part: String) -> bool {
     if part.len() == 8 {
-        let year_parsed = parse_year(part, 4, 8);
+        let year_parsed = parse_usize(&part, 4, 8);
         return year_parsed >= 2020 && year_parsed <= 2030;
     } else {
         return false;
@@ -100,19 +99,19 @@ fn check_eyr(part: String) -> bool {
 
 fn check_hgt(part: String) -> bool {
     if part.len() == 9 {
-        if !&part[4..7].chars().all(char::is_numeric) {
+        if !part[4..7].chars().all(char::is_numeric) {
             return false;
         }
 
-        let hgt_parsed = &part[4..7].parse::<usize>().unwrap();
-        return hgt_parsed >= &150 && hgt_parsed <= &193 && &part[7..9] == "cm"
+        let hgt_parsed = parse_usize(&part, 4, 7);
+        return hgt_parsed >= 150 && hgt_parsed <= 193 && &part[7..9] == "cm"
     } else if part.len() == 8 {
-        if !&part[4..6].chars().all(char::is_numeric) {
+        if !part[4..6].chars().all(char::is_numeric) {
             return false;
         }
 
-        let hgt_parsed = &part[4..6].parse::<usize>().unwrap();
-        return hgt_parsed >= &59 && hgt_parsed <= &76 && &part[6..8] == "in";
+        let hgt_parsed = parse_usize(&part, 4, 6);
+        return hgt_parsed >= 59 && hgt_parsed <= 76 && &part[6..8] == "in";
     } else {
         return false;
     }
@@ -121,7 +120,7 @@ fn check_hgt(part: String) -> bool {
 fn check_hcl(part: String) -> bool {
     if part.len() == 11 {
         if part.as_bytes()[4] as char == '#' {
-            if !&part[5..11].chars().all(|x| x.is_ascii_hexdigit()) {
+            if !part[5..11].chars().all(|x| x.is_ascii_hexdigit()) {
                 return false;
             }
         } else {
@@ -150,8 +149,7 @@ fn check_ecl(part: String) -> bool {
 
 fn check_pid(part: String) -> bool {
     if part.len() == 13 {
-        if !&part[4..13].chars().all(char::is_numeric) {
-            
+        if !part[4..13].chars().all(char::is_numeric) {
             return false;
         }
     } else {
