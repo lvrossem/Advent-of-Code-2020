@@ -14,9 +14,8 @@ def is_sum_from_list(list, sum):
 
 
 def part1():
-    lines = get_lines()
+    lines, current, found = get_lines(), 25, False
     preamble = lines[:25]
-    current, found = 25, False
 
     while not found:
         if not is_sum_from_list(preamble, lines[current]):
@@ -25,16 +24,14 @@ def part1():
             current += 1
             preamble = lines[current - 25:current]
 
-    print('Part 1: {}'.format(lines[current]))
     return lines[current]
 
 
 def part2():
-    lines = get_lines()
-    length = len(lines)
-    to_be_found = part1()
-
+    lines, to_be_found = get_lines(), part1()
     solution, i, found = 0, 0, False
+
+    length = len(lines)
 
     while i < length and not found:
         j = i
@@ -45,7 +42,7 @@ def part2():
             j += 1
         i += 1
 
-    print('Part 2: {}'.format(solution))
+    return solution
 
-
-part2()
+print("Part 1: {}".format(part1()))
+print("Part 2: {}".format(part2()))
