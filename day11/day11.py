@@ -33,14 +33,6 @@ def count_occupied(grid, row, col, adjacent_only):
     return result
 
 
-def count_occupied1(grid, row, col):
-    return count_occupied(grid, row, col, True)
-
-
-def count_occupied2(grid, row, col):
-    return count_occupied(grid, row, col, False)
-
-
 def count_all(grid):
     result = 0
     for row in range(len(grid)):
@@ -51,7 +43,7 @@ def count_all(grid):
     return result
 
 
-def simulate(count_function, max_occupied):
+def simulate(adjacent_only, max_occupied):
     grid = get_input()
     done = False
 
@@ -61,11 +53,11 @@ def simulate(count_function, max_occupied):
         for row in range(len(grid)):
             for col in range(len(grid[0])):
                 if grid[row][col] == 'L':
-                    if count_function(grid, row, col) == 0:
+                    if count_occupied(grid, row, col, adjacent_only) == 0:
                         swaps.append((row, col))
                         done = False
                 elif grid[row][col] == '#':
-                    if count_function(grid, row, col) >= max_occupied:
+                    if count_occupied(grid, row, col, adjacent_only) >= max_occupied:
                         swaps.append((row, col))
                         done = False
 
@@ -80,11 +72,11 @@ def simulate(count_function, max_occupied):
 
 
 def part1():
-    return simulate(count_occupied1, 4)
+    return simulate(True, 4)
 
 
 def part2():
-    return simulate(count_occupied2, 5)
+    return simulate(False, 5)
 
 
 print("Part 1: {}".format(part1()))
